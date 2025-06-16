@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AI-Powered Health Diagnosis</title>
+ <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <h1>Health Diagnosis Assistant</h1>
+    <p>Tell us about yourself and your symptoms.</p>
+  </header>
+
+  <main>
+    <!-- STEP 1: User Info -->
+    <section id="user-info">
+      <h2>Your Details</h2>
+      <form id="info-form">
+        <div class="form-row">
+          <label for="user-name">Name</label>
+          <input id="user-name" name="name" type="text" required />
+        </div>
+        <div class="form-row">
+          <label for="user-age">Age</label>
+          <input id="user-age" name="age" type="number" min="0" required />
+        </div>
+        <div class="form-row">
+          <label for="user-gender">Gender</label>
+          <select id="user-gender" name="gender" required>
+            <option value="">Select…</option>
+            <option>Female</option>
+            <option>Male</option>
+            <option>Non-binary</option>
+            <option>Prefer not to say</option>
+          </select>
+        </div>
+        <button type="button" id="to-symptoms" class="btn-primary">Next: Symptoms</button>
+      </form>
+    </section>
+
+    <!-- STEP 2: Symptom Checklist -->
+    <section id="symptom-section" class="hidden">
+      <h2>Select Your Symptoms</h2>
+      <form id="symptom-form" action="/" method="post">
+        <div class="checkbox-grid">
+          {% for symptom in symptom_columns %}
+          <label class="checkbox-item">
+            <input type="checkbox" name="symptoms" value="{{ symptom }}" />
+            {{ symptom.replace('_', ' ').capitalize() }}
+          </label>
+          {% endfor %}
+        </div>
+        <button type="submit" class="btn-primary">Predict Disease</button>
+      </form>
+    </section>
+
+    <!-- RESULT -->
+    {% if prediction %}
+    <section class="result">
+      <h2>Predicted Disease:</h2>
+      <p class="disease-name">{{ prediction }}</p>
+    </section>
+    {% endif %}
+  </main>
+
+  <footer>
+    <small>© 2025 HealthAI Labs</small>
+  </footer>
+
+  <script>
+    // simple slide‐down transition between steps
+    document.getElementById('to-symptoms').addEventListener('click', () => {
+      const info = document.getElementById('user-info');
+      const symp = document.getElementById('symptom-section');
+      info.classList.add('hidden');
+      symp.classList.remove('hidden');
+      symp.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>
